@@ -20,6 +20,13 @@ public class BitboardManager {
         bitboard.setData(bitboard.getData() | (1L << piecePosition));
     }
 
+    public void deletePiece(String id, int i, int j) throws Exception{
+        bitboardExistsGuard(id);
+        Bitboard bitboard = bitboards.get(id);
+        int piecePosition = (i * bitboard.getSizeJ()) + j;
+        bitboard.setData(bitboard.getData() & ~ (1L << piecePosition));
+    }
+
     public void showBitboard(String id) throws Exception {
         bitboardExistsGuard(id);
         Bitboard bitboard = this.bitboards.get(id);
@@ -30,21 +37,13 @@ public class BitboardManager {
         }
 
         for (int i = board.length() - 1; i >= 0; i--) {
-            if ((i + 1) % bitboard.getSizeJ() == 0) {
-                System.out.println();
-            } else {
+            int endLineIndex = (i + 1);
+            if (endLineIndex % bitboard.getSizeJ() == 1 && endLineIndex != board.length()) {
+                System.out.println("[" + board.charAt(i) + "]");
+            } else{
                 System.out.print("[" + board.charAt(i) + "]");
             }
         }
-
-//        for (int i = 0; i < bitboard.getSizeI() * bitboard.getSizeJ(); i++) {
-//            if ((i + 1) % bitboard.getSizeJ() == 0){
-//                System.out.println();
-//            }else{
-//                System.out.print("[" + board.charAt(i) + "]");
-//            }
-//        }
-
     }
 
     public void buildBitboard(String bitboardId, int sizeI, int sizeJ) throws Exception {
@@ -78,7 +77,8 @@ public class BitboardManager {
     }
 
     private void padBitboard(StringBuilder bitboardBinary, int maxSize) {
-        for (int i = 0; i < (maxSize - bitboardBinary.length()); i++) {
+        int iterateLength = maxSize - bitboardBinary.length();
+        for (int i = 0; i < iterateLength; i++) {
             bitboardBinary.insert(0, '0');
         }
     }
