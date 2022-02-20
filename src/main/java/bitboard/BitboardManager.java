@@ -20,11 +20,25 @@ public class BitboardManager {
         bitboard.setData(bitboard.getData() | (1L << piecePosition));
     }
 
-    public void deletePiece(String id, int i, int j) throws Exception{
+    public void deletePiece(String id, int i, int j) throws Exception {
         bitboardExistsGuard(id);
         Bitboard bitboard = bitboards.get(id);
         int piecePosition = (i * bitboard.getSizeJ()) + j;
-        bitboard.setData(bitboard.getData() & ~ (1L << piecePosition));
+        bitboard.setData(bitboard.getData() & ~(1L << piecePosition));
+    }
+
+    public boolean isPieceSet(String id, int i, int j) throws Exception {
+        bitboardExistsGuard(id);
+        Bitboard bitboard = bitboards.get(id);
+        int piecePosition = (i * bitboard.getSizeJ()) + j;
+        return ((bitboard.getData() >> (piecePosition)) & 1) == 1;
+    }
+
+    public void movePiece(String id, int fromI, int fromJ, int toI, int toJ) throws Exception {
+        if (isPieceSet(id, fromI, fromJ)){
+            deletePiece(id, fromI, fromJ);
+            setPiece(id, toI, toJ);
+        }
     }
 
     public void showBitboard(String id) throws Exception {
@@ -40,7 +54,7 @@ public class BitboardManager {
             int endLineIndex = (i + 1);
             if (endLineIndex % bitboard.getSizeJ() == 1 && endLineIndex != board.length()) {
                 System.out.println("[" + board.charAt(i) + "]");
-            } else{
+            } else {
                 System.out.print("[" + board.charAt(i) + "]");
             }
         }
