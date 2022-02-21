@@ -13,6 +13,16 @@ public class BitboardManager {
         this.bitboards = new HashMap<>();
     }
 
+    public void setAllBits(String id) throws Exception {
+        bitboardExistsGuard(id);
+        Bitboard bitboard = bitboards.get(id);
+        for (int i = 0; i < bitboard.getSizeI(); i++){
+            for (int j = 0; j < bitboard.getSizeJ(); j++){
+                setPiece(id, i, j);
+            }
+        }
+    }
+
     public void deleteNeighbors(String id, int i, int j) throws Exception{
         deletePiece(id, i + 1, j);
         deletePiece(id, i - 1, j);

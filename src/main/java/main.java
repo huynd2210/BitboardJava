@@ -11,10 +11,12 @@ public class main {
 //        bm.movePiece("test", 1, 3, 0, 0);
 //        System.out.println();
 //        bm.showBitboard("test");
-        bm.setNeighbors("a", 1, 1);
-        bm.showBitboard("a");
-        System.out.println("-------");
-        bm.deleteNeighbors("a", 1,1);
+//        bm.setNeighbors("a", 1, 1);
+//        bm.showBitboard("a");
+//        System.out.println("-------");
+//        bm.deleteNeighbors("a", 1,1);
+//        bm.showBitboard("a");
+        bm.setAllBits("a");
         bm.showBitboard("a");
 
     }
