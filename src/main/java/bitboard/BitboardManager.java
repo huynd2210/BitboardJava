@@ -13,9 +13,35 @@ public class BitboardManager {
         this.bitboards = new HashMap<>();
     }
 
+    public void deleteNeighbors(String id, int i, int j) throws Exception{
+        deletePiece(id, i + 1, j);
+        deletePiece(id, i - 1, j);
+        deletePiece(id, i, j + 1);
+        deletePiece(id, i, j - 1);
+        deletePiece(id, i + 1, j + 1);
+        deletePiece(id, i + 1, j - 1);
+        deletePiece(id, i - 1, j + 1);
+        deletePiece(id, i - 1, j - 1);
+    }
+
+    //Set all neighbors of index to 1
+    public void setNeighbors(String id, int i, int j) throws Exception {
+        setPiece(id, i + 1, j);
+        setPiece(id, i - 1, j);
+        setPiece(id, i, j + 1);
+        setPiece(id, i, j - 1);
+        setPiece(id, i + 1, j + 1);
+        setPiece(id, i + 1, j - 1);
+        setPiece(id, i - 1, j + 1);
+        setPiece(id, i - 1, j - 1);
+    }
+
     public void setPiece(String id, int i, int j) throws Exception {
         bitboardExistsGuard(id);
         Bitboard bitboard = bitboards.get(id);
+        if (!isInBound(bitboard, i, j)) {
+            return;
+        }
         int piecePosition = (i * bitboard.getSizeJ()) + j;
         bitboard.setData(bitboard.getData() | (1L << piecePosition));
     }
@@ -23,6 +49,10 @@ public class BitboardManager {
     public void deletePiece(String id, int i, int j) throws Exception {
         bitboardExistsGuard(id);
         Bitboard bitboard = bitboards.get(id);
+        if (!isInBound(bitboard, i, j)) {
+            return;
+        }
+
         int piecePosition = (i * bitboard.getSizeJ()) + j;
         bitboard.setData(bitboard.getData() & ~(1L << piecePosition));
     }
@@ -30,16 +60,21 @@ public class BitboardManager {
     public boolean isPieceSet(String id, int i, int j) throws Exception {
         bitboardExistsGuard(id);
         Bitboard bitboard = bitboards.get(id);
+        if (!isInBound(bitboard, i, j)) {
+            return false;
+        }
         int piecePosition = (i * bitboard.getSizeJ()) + j;
         return ((bitboard.getData() >> (piecePosition)) & 1) == 1;
     }
 
     public void movePiece(String id, int fromI, int fromJ, int toI, int toJ) throws Exception {
-        if (isPieceSet(id, fromI, fromJ)){
+        if (isPieceSet(id, fromI, fromJ)) {
             deletePiece(id, fromI, fromJ);
             setPiece(id, toI, toJ);
         }
     }
+
+
 
     public void showBitboard(String id) throws Exception {
         bitboardExistsGuard(id);
@@ -95,5 +130,10 @@ public class BitboardManager {
         for (int i = 0; i < iterateLength; i++) {
             bitboardBinary.insert(0, '0');
         }
+
+
+    }
+    private static boolean isInBound(Bitboard bitboard, int i, int j) {
+        return !(i < 0 || i >= bitboard.getSizeI() || j < 0 || j >= bitboard.getSizeJ());
     }
 }
