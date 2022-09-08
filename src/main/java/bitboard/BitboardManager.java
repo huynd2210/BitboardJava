@@ -85,7 +85,6 @@ public class BitboardManager {
     }
 
 
-
     public void showBitboard(String id) throws Exception {
         bitboardExistsGuard(id);
         Bitboard bitboard = this.bitboards.get(id);
